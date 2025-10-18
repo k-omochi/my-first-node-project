@@ -11,6 +11,7 @@ let users = [
 // use json
 app.use(express.json());
 
+// api
 app.get('/api/users', (req, res) => {
     res.json(users);
 });
@@ -22,6 +23,17 @@ app.get('/api/users/:id', (req, res) => {
     }
     res.json(user);
 });
+
+app.post('/api/users', (req, res) => {
+    const newUser = {
+        id: users.length + 1,
+        name: req.body.name
+    };
+    users.push(newUser);
+    res.status(201).json(newUser);
+});
+
+// -------------------
 
 app.listen(PORT, () => {
     console.log('server started.');
