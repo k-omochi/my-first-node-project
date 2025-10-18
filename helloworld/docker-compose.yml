@@ -9,3 +9,4 @@ services:
         working_dir: /app
         command: node webserver.js
         tty: true
+        stdin_open: true
