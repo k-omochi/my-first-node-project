@@ -33,6 +33,16 @@ app.post('/api/users', (req, res) => {
     res.status(201).json(newUser);
 });
 
+app.delete('/api/users/:id', (req, res) => {
+    const requestId = parseInt(req.params.id);
+    const userIndex = users.findIndex(u => u.id === requestId);
+    if (!userIndex) {
+        return res.status(404).json({error: 'user not found.'});
+    }
+    users.splice(userIndex, 1);
+    res.json(users);
+});
+
 // -------------------
 
 app.listen(PORT, () => {
