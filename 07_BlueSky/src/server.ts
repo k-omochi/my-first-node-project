@@ -16,11 +16,15 @@ app.get('/', async (req: Request, res: Response) => {
     identifier: process.env.BLUESKY_HANDLE!,
     password: process.env.BLUESKY_PASSWORD!
   });
-  const timeline = await agent.getTimeline({ limit: 10 });
+  const timeline = await agent.app.bsky.feed.searchPosts({
+    q: 'Node.js',
+    limit: 5, // 取得件数（デフォルト25、最大100）
+  });
 
+  console.log(timeline.data.posts[0]);
   res.render('index', {
     title: 'Bluesky Timeline',
-    posts: timeline.data.feed
+    posts: timeline.data.posts
   });
 });
 
