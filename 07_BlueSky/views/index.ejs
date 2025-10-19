@@ -1,0 +1,21 @@
+<%- include('partials/header') %>
+
+<h2><%= title %></h2>
+<div class="timeline">
+    <% posts.forEach(item => { %>
+      <div class="post">
+        <div class="author">
+          <strong><%= item.post.author.displayName || item.post.author.handle %></strong>
+          <span class="handle">@<%= item.post.author.handle %></span>
+        </div>
+        <div class="content">
+          <%= item.post.record.text %>
+        </div>
+        <div class="meta">
+          <%= new Date(item.post.record.createdAt).toLocaleString('ja-JP') %>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+
+<%- include('partials/footer') %>
