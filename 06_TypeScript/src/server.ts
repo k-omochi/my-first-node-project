@@ -6,11 +6,6 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(express.json());
 
-app.get('/', (req: Request, res: Response) => {
-  res.render('index', {
-    title: 'TypeScript + Express'
-  });
-});
 
 interface User {
   id: number;
@@ -24,9 +19,28 @@ const users: User[] = [
   {id: 2, name: 'Bob', email: "bob@fuga.com", age: 35 },
 ];
 
-app.get('/api/users', (req: Request, res: Response) => {
-  res.json(users);
+// root
+app.get('/', (req: Request, res: Response) => {
+  res.render('index', {
+    title: 'TypeScript + Express'
+  });
 });
+
+// about
+app.get('/about', (_req, res) => {
+    res.render('index', {
+      title: 'About',
+      message: 'このサイトについて'
+    });
+});
+
+// ユーザー一覧
+app.get('/users', (_req, res) => {
+    res.render('users', {
+      title: 'ユーザー一覧',
+      users: users
+    });
+  });
 
 const PORT = 3000;
 app.listen(PORT, () => {
