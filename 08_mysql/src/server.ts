@@ -1,34 +1,20 @@
-import express, { Request, Response } from 'express';
-import { BskyAgent } from '@atproto/api';
 
-const app = express();
-app.set('view engine', 'ejs');
-app.use(express.static('public'));
-app.use(express.json());
+const mysql = require('mysql2');
 
-const agent = new BskyAgent({
-  service: 'https://bsky.social'
-})
+async function main(){
+  try {
+    const connection = await mysql.createConnection({
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME
+    });
 
-// root
-app.get('/', async (req: Request, res: Response) => {
-  await agent.login({
-    identifier: process.env.BLUESKY_HANDLE!,
-    password: process.env.BLUESKY_PASSWORD!
-  });
-  const timeline = await agent.app.bsky.feed.searchPosts({
-    q: 'Node.js',
-    limit: 5, // 取得件数（デフォルト25、最大100）
-  });
+    console.log('mysql connected.');
+    await connection.end();
+  } catch (err) {
+    console.error('connection error: ', err);
+  }
+}
 
-  console.log(timeline.data.posts[0]);
-  res.render('index', {
-    title: 'Bluesky Timeline',
-    posts: timeline.data.posts
-  });
-});
-
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`サーバー起動: http://localhost:${PORT}`);
-});
+main();
