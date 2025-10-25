@@ -1,5 +1,9 @@
+import mysql, { RowDataPacket } from 'mysql2/promise';
 
-const mysql = require('mysql2');
+interface TestRow extends RowDataPacket {
+  id: number;
+  name: string;
+}
 
 async function main(){
   try {
@@ -11,6 +15,10 @@ async function main(){
     });
 
     console.log('mysql connected.');
+
+    const [rows] = await connection.query<TestRow[]>('SELECT * FROM test');
+    console.log(rows);
+
     await connection.end();
   } catch (err) {
     console.error('connection error: ', err);
