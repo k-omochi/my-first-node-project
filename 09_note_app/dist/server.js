@@ -7,20 +7,22 @@ const promise_1 = __importDefault(require("mysql2/promise"));
 const express_1 = __importDefault(require("express"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
+const pool = promise_1.default.createPool({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+});
+console.log('pool created.');
 // api
 app.get('/api/journals', async (req, res) => {
     try {
-        const connection = await promise_1.default.createConnection({
-            host: process.env.DB_HOST,
-            user: process.env.DB_USER,
-            password: process.env.DB_PASSWORD,
-            database: process.env.DB_NAME
-        });
-        console.log('mysql connected.');
-        const [rows] = await connection.query('SELECT * FROM journal');
+        const [rows] = await pool.query('SELECT * FROM journal');
         console.log(rows);
         res.json(rows);
-        await connection.end();
     }
     catch (err) {
         console.error('connection error: ', err);

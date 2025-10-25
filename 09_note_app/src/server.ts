@@ -9,24 +9,25 @@ interface JournalRow extends RowDataPacket {
 const app = express();
 app.use(express.json());
 
+const pool = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
+});
+console.log('pool created.');
+
 // api
 app.get('/api/journals', async (req: Request, res: Response) => {
   try {
-    const connection = await mysql.createConnection({
-      host: process.env.DB_HOST,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME
-    });
 
-    console.log('mysql connected.');
-
-    const [rows] = await connection.query<JournalRow[]>('SELECT * FROM journal');
+    const [rows] = await pool.query<JournalRow[]>('SELECT * FROM journal');
     console.log(rows);
     
     res.json(rows);
-
-    await connection.end();
   } catch (err) {
     console.error('connection error: ', err);
   }
