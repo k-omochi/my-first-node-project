@@ -28,6 +28,15 @@ app.get('/api/journals', async (req, res) => {
         console.error('connection error: ', err);
     }
 });
+app.post('/api/journals', async (req, res) => {
+    try {
+        await pool.query('INSERT INTO journal (content) VALUES (?)', [req.body.content]);
+    }
+    catch (err) {
+        console.error('connection error: ', err);
+    }
+    res.status(201).json();
+});
 // -------------------
 const PORT = 3000;
 app.listen(PORT, () => {
