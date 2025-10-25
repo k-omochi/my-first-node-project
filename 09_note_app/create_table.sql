@@ -1,4 +1,8 @@
-create table journal (
-    id integer not null primary key AUTO_INCREMENT,
-    content text
-)
+CREATE TABLE journal (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  content TEXT NOT NULL,
+  user_id INT NOT NULL,
+  journal_date DATE NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);

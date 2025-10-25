@@ -4,6 +4,9 @@ import express, { Request, Response } from 'express';
 interface JournalRow extends RowDataPacket {
   id: number;
   content: string;
+  journal_date: string;
+  created_at: Date;
+  updated_at: Date;
 }
 
 const app = express();
@@ -14,6 +17,8 @@ const pool = mysql.createPool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
+  timezone: '+09:00', // JST
+  dateStrings: true,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0

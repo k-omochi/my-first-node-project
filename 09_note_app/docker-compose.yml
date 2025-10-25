@@ -27,6 +27,7 @@ services:
       - mysql-data:/var/lib/mysql
     env_file:
       - db.env
+    command: --default-time-zone='+09:00'
 
 volumes:
   mysql-data:

@@ -12,6 +12,8 @@ const pool = promise_1.default.createPool({
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
+    timezone: '+09:00', // JST
+    dateStrings: true,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
