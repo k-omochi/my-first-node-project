@@ -32,7 +32,9 @@ app.get('/api/journals', async (req, res) => {
 });
 app.post('/api/journals', async (req, res) => {
     try {
-        await pool.query('INSERT INTO journal (content) VALUES (?)', [req.body.content]);
+        const { content, journalDate } = req.body;
+        console.log(`content: ${content}, journalDate: ${journalDate}`);
+        await pool.query('INSERT INTO journal (content, user_id, journal_date) VALUES (?, ?, ?)', [content, 1, journalDate]);
     }
     catch (err) {
         console.error('connection error: ', err);
