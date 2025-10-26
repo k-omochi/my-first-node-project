@@ -26,27 +26,34 @@ const pool = mysql.createPool({
 console.log('pool created.');
 
 // api
-app.get('/api/journals', async (req: Request, res: Response) => {
-  try {
-    const [rows] = await pool.query<JournalRow[]>('SELECT * FROM journal');
-    console.log(rows);
-    
-    res.json(rows);
-  } catch (err) {
-    console.error('connection error: ', err);
-  }
+app.get('/api/journals', (req: Request, res: Response) => {
+  (async () => {
+    try {
+      const [rows] = await pool.query<JournalRow[]>('SELECT * FROM journal');
+      console.log(rows);
+      
+      res.json(rows);
+    } catch (err) {
+      console.error('connection error: ', err);
+    }
+  });
 });
 
-app.post('/api/journals',async (req: Request, res: Response) => {
-  try {
-    const { content, journalDate } = req.body;
-    console.log(`content: ${content}, journalDate: ${journalDate}`);
+app.post('/api/journals', (req: Request, res: Response) => {
+  (async () => {
+    try {
+      const { content, journalDate } = req.body as {
+        content: string;
+        journalDate: string;
+      };
+      console.log(`content: ${content}, journalDate: ${journalDate}`);
 
-    await pool.query('INSERT INTO journal (content, user_id, journal_date) VALUES (?, ?, ?)',
-     [content, 1, journalDate]);
-  } catch (err) {
-    console.error('connection error: ', err);
-  }
+      await pool.query('INSERT INTO journal (content, user_id, journal_date) VALUES (?, ?, ?)',
+      [content, 1, journalDate]);
+    } catch (err) {
+      console.error('connection error: ', err);
+    }
+  });
   res.status(201).json();
 })
 

@@ -20,25 +20,29 @@ const pool = promise_1.default.createPool({
 });
 console.log('pool created.');
 // api
-app.get('/api/journals', async (req, res) => {
-    try {
-        const [rows] = await pool.query('SELECT * FROM journal');
-        console.log(rows);
-        res.json(rows);
-    }
-    catch (err) {
-        console.error('connection error: ', err);
-    }
+app.get('/api/journals', (req, res) => {
+    (async () => {
+        try {
+            const [rows] = await pool.query('SELECT * FROM journal');
+            console.log(rows);
+            res.json(rows);
+        }
+        catch (err) {
+            console.error('connection error: ', err);
+        }
+    });
 });
-app.post('/api/journals', async (req, res) => {
-    try {
-        const { content, journalDate } = req.body;
-        console.log(`content: ${content}, journalDate: ${journalDate}`);
-        await pool.query('INSERT INTO journal (content, user_id, journal_date) VALUES (?, ?, ?)', [content, 1, journalDate]);
-    }
-    catch (err) {
-        console.error('connection error: ', err);
-    }
+app.post('/api/journals', (req, res) => {
+    (async () => {
+        try {
+            const { content, journalDate } = req.body;
+            console.log(`content: ${content}, journalDate: ${journalDate}`);
+            await pool.query('INSERT INTO journal (content, user_id, journal_date) VALUES (?, ?, ?)', [content, 1, journalDate]);
+        }
+        catch (err) {
+            console.error('connection error: ', err);
+        }
+    });
     res.status(201).json();
 });
 // -------------------
