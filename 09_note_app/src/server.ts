@@ -1,3 +1,4 @@
+import 'express-async-errors';
 import mysql, { RowDataPacket } from 'mysql2/promise';
 import express, { Request, Response } from 'express';
 
