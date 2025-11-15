@@ -26,8 +26,7 @@ const pool = mysql.createPool({
 console.log('pool created.');
 
 // api
-app.get('/api/journals', (req: Request, res: Response) => {
-  (async () => {
+app.get('/api/journals', async (req: Request, res: Response) => {
     try {
       const [rows] = await pool.query<JournalRow[]>('SELECT * FROM journal');
       console.log(rows);
@@ -36,11 +35,9 @@ app.get('/api/journals', (req: Request, res: Response) => {
     } catch (err) {
       console.error('connection error: ', err);
     }
-  });
 });
 
-app.post('/api/journals', (req: Request, res: Response) => {
-  (async () => {
+app.post('/api/journals', async (req: Request, res: Response) => {
     try {
       const { content, journalDate } = req.body as {
         content: string;
@@ -53,9 +50,30 @@ app.post('/api/journals', (req: Request, res: Response) => {
     } catch (err) {
       console.error('connection error: ', err);
     }
-  });
-  res.status(201).json();
-})
+    res.status(201).json();
+});
+
+// WIP
+// app.put('api/journals/:id', (req: Request, res: Response) => {
+//   ( async () => {
+//     try {
+//       console.log("update journal");
+//     } catch (err) {
+//       console.error('connection error: ', err);
+//     }
+//   });
+//   res.status(201).json();
+// });
+
+// app.delete('api/journals/:id', (req: Request, res: Response) => {
+//   ( async () => {
+//     try {
+//       console.log("delete journal");
+//     } catch (err) {
+//       console.error('connection error: ', err);
+//     }
+//   });
+// });
 
 // -------------------
 const PORT = 3000;
